@@ -30,6 +30,7 @@ Use that method only at the end of the code, because using this method stops the
 - ```move()``` = moves one field forward
 
 ### Actions definition
+*(Not relevant for you if you are just a player)*
 These are actions you will find the actionlogs.
 - move = moves one field forward
 - try_move = tried to move, there was something in the way
