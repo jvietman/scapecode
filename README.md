@@ -42,6 +42,8 @@ These are actions you will find the actionlogs.
 - turn_left = rotates to the left
 - check_move = checks if move is possible (if nothing is blocking its way)
 - check_end = check if character is on an end field
+- dead = character died
+- teleport = character got teleported
 
 
 ## How to make custom levels (WIP...)
@@ -70,6 +72,8 @@ Objects are things in a room that have a certain function. The object key in the
 Objects always have to be included in the map , that means as a symbol in the rooms strings. To give them a function you will need to add them to the objects array.
 You can then program the objects to have a certain function as you wish.
 
+Functions of an object (like teleporting a player) only get checked when the player moved. For example the teleport only happens AFTER a player moved onto a teleporter. If the player is already on a teleporter and turns right, the function does not execute. Only when the character moves the function executes.
+
 All objects have a different structure, but all objects need to have a name and objects themselves are always declared as a dictionary.
 
 #### Teleporter ("tp")
@@ -89,8 +93,14 @@ Template:
 Positions dont have to be in order, so the teleporter you go into doesnt have to be the first teleporter.
 
 There are different mechanics of a teleporter you can use for some creative level designs:
-1. Only using one teleporter
+1. Normal usage, two teleporters
+You can use two teleporters and link them together using the p1 and p2 keys.
 
-2. Not setting a reference
+2. Only using one teleporter
+You can set any position (p1 or p2) to the teleporter you go through and set the other position to be any field you want in the level. In short, you can create one way teleporters that teleport you away but dont teleport back.
 
-3. Using more than 2 teleporters
+3. Not setting a reference
+If you just have a teleporter in your level without any positions (any object p1 or p2) set to it, the teleporter will try to teleport you, but doesnt know where, and this leads to death. In short, walking through a teleporter that doesnt have a position configured kills you.
+
+4. Using more than 2 teleporters
+You can link multiple teleporters together, so you can for example have three or more teleporters in a circle, each teleporting you to the teleporter next to them.

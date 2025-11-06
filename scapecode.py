@@ -7,6 +7,9 @@ class scapecode:
         self.rooms = []
         self.end_fields = []
         
+        # objects
+        self.teleporters = []
+        
         # values during runtime
         self.pos = [0, 0]
         self.cur_room = 0
@@ -53,11 +56,26 @@ class scapecode:
                 print("No end field defined. Please include at least one \"E\" block in one of your rooms.")
                 exit()
             
+            # setup objects
+            for i in l["objects"]:
+                match i["name"]:
+                    case "tp":
+                        self.teleporters.append([i["p1"], i["p2"]])
+                        self.teleporters.append([i["p2"], i["p1"]])
+            if self.teleporters: # sort teleporters for quicker access
+                self.teleporters = sorted(self.teleporters)
+            
             # setup character
             self.cur_room, self.pos = start_field
                         
             f.close()
             
+    def die(self):
+        """Congrats, you are dead.
+        """
+        self.actionlog.append("dead")
+        self.succeeded, self.running = False, False
+    
     def get_block(self, room: int, pos: list[int]) -> str:
         """Returns block in certain room and at certain position.
 
@@ -81,6 +99,23 @@ class scapecode:
         next[mod] += ((-1+(mod*2)) * self.facing) + (-1+(3*(1-mod)))
         # I decided to calculate the next position mathematically instead of simply using an if one-liner everyone would easily understand, silly me :3
         return next
+        
+    def object_field(self):
+        """Checks for objects on the current field and executes its function
+        """
+        # check for objects
+        match self.get_block(self.cur_room, self.pos):
+            case "@": # teleport
+                if not self.teleporters:
+                    self.die()
+                else:
+                    for i in self.teleporters:
+                        if self.pos[0] < i[0][0]: continue
+                        if self.pos == i[0]:
+                            self.pos = i[1]
+                            self.actionlog.append("teleport")
+                            return
+                    self.die()
     
     def check_move(self) -> bool:
         """Checks if the next the block the character is facing to is free to move to (and if its still in map).
@@ -129,6 +164,8 @@ def log(action: str):
     - turn_left = rotates to the left
     - check_move = checks if move is possible (if nothing is blocking its way)
     - check_end = check if character is on an end field
+    - dead = character died
+    - teleport = character got teleported
 
     Args:
         action (str): Action name to log.
@@ -178,6 +215,9 @@ def move():
         log("move")
     else:
         log("trymove")
+    
+    # check for object fields
+    main.object_field()
     
     if end(): return
     
