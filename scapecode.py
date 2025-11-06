@@ -69,6 +69,39 @@ class scapecode:
             str: Block as String
         """
         return self.rooms[room][pos[1]][pos[0]]
+    
+    def get_next(self) -> list[int]:
+        """Return the position of the next field the character is facing.
+
+        Returns:
+            list[int]: _description_
+        """
+        next = [self.pos[0], self.pos[1]]
+        mod = (self.facing+1) % 2
+        next[mod] += ((-1+(mod*2)) * self.facing) + (-1+(3*(1-mod)))
+        # I decided to calculate the next position mathematically instead of simply using an if one-liner everyone would easily understand, silly me :3
+        return next
+    
+    def check_move(self) -> bool:
+        """Checks if the next the block the character is facing to is free to move to (and if its still in map).
+
+        Returns:
+            bool: Is the move possible
+        """
+        
+        next = self.get_next()
+        # if outside of map
+        if next[1] >= len(self.rooms[self.cur_room]) or next[0] >= len(self.rooms[self.cur_room][self.pos[1]]):
+            return False
+        
+        # check for blocks
+        match self.get_block(self.cur_room, next):
+            case "#":
+                return False
+            case _:
+                return True
+
+###
 
 # check if level running (including stopping when on end field)
 def end() -> bool:
@@ -92,6 +125,10 @@ def log(action: str):
     ### Actions legend (all animations that can be displayed)
     - move = moves one field forward
     - try_move = tried to move, there was something in the way
+    - turn_right = rotates to the right
+    - turn_left = rotates to the left
+    - check_move = checks if move is possible (if nothing is blocking its way)
+    - check_end = check if character is on an end field
 
     Args:
         action (str): Action name to log.
@@ -132,20 +169,58 @@ def move():
     if end(): return
     
     # get position where the character will land if he moves
-    nextpos = [main.pos[0], main.pos[1]]
-    # Calculate the next position mathematically instead of simply using an if one-liner, silly me :3
-    mod = (main.facing+1) % 2
-    nextpos[mod] += ((-1+(mod*2)) * main.facing) + (-1+(3*(1-mod)))
-        
-    # check if move is valid depending on block it will land on
-    match main.get_block(main.cur_room, nextpos):
-        case "#":
-            log("trymove")
-        case _:
-            main.pos = nextpos
-            log("move")
+    nextpos = main.get_next()
+    
+    # check if move is valid
+    if main.check_move():
+        # move, set new position
+        main.pos = nextpos
+        log("move")
+    else:
+        log("trymove")
     
     if end(): return
+    
+def turnRight():
+    """Rotate character to the right.
+    """
+    if end(): return
+    
+    # add 1 to facing value; if higher than maximum (3) then set to 0
+    main.facing = 0 if main.facing+1 > 3 else main.facing+1
+    log("turn_right")
+
+def turnLeft():
+    """Rotate character to the left.
+    """
+    if end(): return
+    
+    # substract 1 from facing value; if lower than 0 then set to maximum (3)
+    main.facing = 3 if main.facing-1 < 0 else main.facing-1
+    log("turn_left")
+
+def isMovePossible() -> bool:
+    """Checks if the next the block the character is facing to is free to move to.
+
+    Returns:
+        bool: Is the move possible
+    """
+    if end(): return
+    
+    log("check_move")
+    return main.check_move()
+
+def isOnEnd() -> bool:
+    """Checks if the character is on an end field.
+    
+    The original codescape terminates once on the end field. Here, you have to manually check if on end field and stop your code. This adds to the difficulty ;)
+
+    Returns:
+        bool: Is on an end field
+    """
+    
+    log("check_end")
+    return end()
 
 ### end of public methods ###
 

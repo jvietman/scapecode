@@ -28,12 +28,25 @@ Use that method only at the end of the code, because using this method stops the
 
 ### Moveset
 - ```move()``` = moves one field forward
+- ```turnRight()``` = rotates to the right
+- ```turnLeft()``` = rotates to the left
+- ```isMovePossible()``` = checks if move is possible (if nothing is blocking its way or if still in map)
+- ```isOnEnd()``` = check if character is on an end field (because here the code doesnt terminate on its on, which adds to the difficulty ;) )
 
 ### Actions definition
 *(Not relevant for you if you are just a player)*
 These are actions you will find the actionlogs.
 - move = moves one field forward
 - try_move = tried to move, there was something in the way
+- turn_right = rotates to the right
+- turn_left = rotates to the left
+- check_move = checks if move is possible (if nothing is blocking its way)
+- check_end = check if character is on an end field
 
 
 ## How to make custom levels
+### Symbols definition
+Empty fields are walkable paths by default
+- S = Startfield
+- E = Endfield(s)
+- \# = Wall
