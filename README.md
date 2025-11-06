@@ -94,13 +94,17 @@ Positions dont have to be in order, so the teleporter you go into doesnt have to
 
 There are different mechanics of a teleporter you can use for some creative level designs:
 1. Normal usage, two teleporters
+
 You can use two teleporters and link them together using the p1 and p2 keys.
 
 2. Only using one teleporter
+
 You can set any position (p1 or p2) to the teleporter you go through and set the other position to be any field you want in the level. In short, you can create one way teleporters that teleport you away but dont teleport back.
 
 3. Not setting a reference
+
 If you just have a teleporter in your level without any positions (any object p1 or p2) set to it, the teleporter will try to teleport you, but doesnt know where, and this leads to death. In short, walking through a teleporter that doesnt have a position configured kills you.
 
 4. Using more than 2 teleporters
+
 You can link multiple teleporters together, so you can for example have three or more teleporters in a circle, each teleporting you to the teleporter next to them.
