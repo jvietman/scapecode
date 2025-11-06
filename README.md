@@ -44,9 +44,53 @@ These are actions you will find the actionlogs.
 - check_end = check if character is on an end field
 
 
-## How to make custom levels
+## How to make custom levels (WIP...)
+### Structure
+This structure always has to be included.
+```json
+{
+    "rooms": [],
+    "objects": []
+}
+```
+(Check any provided level for examples)
+
+The rooms (yes, there are multiple rooms in a level) are the map the character walks on. Here you can create different shapes of rooms, set the start and end fields and add objects.
+
 ### Symbols definition
 Empty fields are walkable paths by default
-- S = Startfield
-- E = Endfield(s)
+- S = Startfield, gets automatically detected and player will start there
+- E = Endfield(s), if on this field, then the level is solved
 - \# = Wall
+- @ = Teleporter
+
+### Objects
+Objects are things in a room that have a certain function. The object key in the level json is there to give the symbols you have on the map a function.
+
+Objects always have to be included in the map , that means as a symbol in the rooms strings. To give them a function you will need to add them to the objects array.
+You can then program the objects to have a certain function as you wish.
+
+All objects have a different structure, but all objects need to have a name and objects themselves are always declared as a dictionary.
+
+#### Teleporter ("tp")
+A Teleporter can teleport the character from point A to B (or get you killed :3).
+
+Template:
+```json
+{
+    "name": "tp",
+    "p1": [x1, y1],
+    "p2": [x2, y2]
+}
+```
+- p1 = One position
+- p2 = Another position
+
+Positions dont have to be in order, so the teleporter you go into doesnt have to be the first teleporter.
+
+There are different mechanics of a teleporter you can use for some creative level designs:
+1. Only using one teleporter
+
+2. Not setting a reference
+
+3. Using more than 2 teleporters
