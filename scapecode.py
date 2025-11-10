@@ -59,10 +59,13 @@ class scapecode:
             # setup objects
             for i in l["objects"]:
                 match i["name"]:
-                    case "tp":
+                    case "tp": # teleporters
+                        # add positions of teleporters to the list as [p1, p2] and [p2, p1]
+                        # this is to minimize search time and improve performance
                         self.teleporters.append([i["p1"], i["p2"]])
                         self.teleporters.append([i["p2"], i["p1"]])
-            if self.teleporters: # sort teleporters for quicker access
+            # sort teleporters for quicker search
+            if self.teleporters:
                 self.teleporters = sorted(self.teleporters)
             
             # setup character
