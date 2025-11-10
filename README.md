@@ -90,7 +90,7 @@ Template:
 - p1 = One position
 - p2 = Another position
 
-Positions dont have to be in order, so the teleporter you go into doesnt have to be the first teleporter.
+Teleporters only update when you use the ```move()``` command, that means after you executed the move command and at the end of the move you are on the teleporter field. Positions dont have to be in order, so the teleporter you go into doesnt have to be the first teleporter.
 
 There are different mechanics of a teleporter you can use for some creative level designs:
 1. Normal usage, two teleporters
